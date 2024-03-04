@@ -1,65 +1,47 @@
-# short-gist README
+# QuickGist
 
-This is the README for your extension "short-gist". After writing up a brief description, we recommend including the following sections.
+![QuickGist Logo](images/quickgist.jpeg)
+
+QuickGist is a Visual Studio Code extension that allows you to quickly generate gists for the active file or selected text and generates a short URL for easy sharing.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- **Publish File:** Create a gist for the entire content of your active file.
+- **Publish Selection:** Generate a gist for the selected text within your active file.
 
-For example if there is an image subfolder under your extension project workspace:
+## Installation
 
-\!\[feature X\]\(images/feature-x.png\)
+1. Open Visual Studio Code.
+2. Go to the Extensions view (`Ctrl + Shift + X` or `Cmd + Shift + X` on macOS).
+3. Search for `QuickGist`.
+4. Click the Install button.
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## Usage
 
-## Requirements
+### Publish File
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+1. Open the file you want to share.
+2. Run the command `QuickGist: Publish File`.
+3. A short URL for your Gist will be generated and displayed.
 
-## Extension Settings
+### Publish Selection
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+1. Select the text you want to share.
+2. Run the command `QuickGist: Publish Selection`.
+3. A short URL for your Gist will be generated and displayed.
 
-For example:
+## Notifications
 
-This extension contributes the following settings:
+Ensure that notifications are enabled on the bottom right corner to get the copy url button. ![Enable Notifications](images/notification.png).
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+## Feedback
 
-## Known Issues
+Found a bug or have a suggestion? Feel free to [open an issue](https://github.com/HAPPYS1NGH/QuickGist/issues).
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+## License
 
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-## Working with Markdown
-
-You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+**Enjoy Gisting with QuickGist! 🚀**
