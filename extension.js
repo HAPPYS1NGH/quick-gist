@@ -1,4 +1,6 @@
 const vscode = require("vscode")
+const axios = require("axios")
+require("dotenv").config({ path: __dirname + "/.env.local" })
 
 function activate(context) {
   console.log('Congratulations, your extension "short-gist" is now active!')
@@ -30,14 +32,16 @@ function activate(context) {
           const contentString = Buffer.from(fileContent).toString("utf-8")
 
           // Log the file content
-          console.log(contentString)
+          //   console.log(contentString)
 
           // Call the createGist function to create a Gist
           const gistURL = await createGist(contentString)
-
+          console.log(gistURL)
+          const url = await shortenUrl(gistURL)
+          console.log(url)
           // Display a success message to the user
           vscode.window.showInformationMessage(
-            "Gist created successfully!" + gistURL
+            "Gist created successfully!" + gistURL + "Shortened URL: " + url
           )
         } catch (error) {
           console.error("Error reading file:", error.message)
@@ -58,16 +62,28 @@ function activate(context) {
 function deactivate() {}
 
 // Register the "short-gist.createGist" command
-const createGist = () => {
-  vscode.commands.registerCommand("short-gist.createGist", async (content) => {
-    // Use the content parameter to create a Gist
-    // You need to implement the Gist creation logic here using the GitHub API or a service of your choice
-    // ...
+const createGist = async (contentString) => {
+  let gistURL = "https://happysingh.vercel.app/"
 
-    // For demonstration purposes, log the content to the console
-    console.log("Creating Gist with content:", content)
-    return "gistURL"
-  })
+  return gistURL
+}
+
+async function shortenUrl(url) {
+  const options = {
+    method: "POST",
+    url: "https://fast-url-shortener1.p.rapidapi.com/shorten",
+    headers: {
+      "content-type": "application/json",
+      "X-RapidAPI-Key": process.env.RAPIDAPI_KEY,
+      "X-RapidAPI-Host": "fast-url-shortener1.p.rapidapi.com",
+    },
+    data: {
+      url: url,
+    },
+  }
+  const response = await axios.request(options)
+  console.log(response)
+  return response.data.shortened
 }
 
 // Export the activate, deactivate, and createGist functions
