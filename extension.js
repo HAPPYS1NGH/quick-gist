@@ -4,13 +4,13 @@ const Credentials = require("./credentials")
 require("dotenv").config({ path: __dirname + "/.env.local" })
 
 async function activate(context) {
-  console.log('Congratulations, your extension "short-gist" is now active!')
+  console.log('Congratulations, your extension "QuickGist" is now active!')
 
   // Create a new instance of the Credentials class for authorization
   const octokit = await authenticateGithub(context)
 
   let fileDisposable = vscode.commands.registerCommand(
-    "short-gist.publishFile",
+    "QuickGist.publishFile",
     async () => {
       const editor = vscode.window.activeTextEditor
       if (editor) {
@@ -37,9 +37,8 @@ async function activate(context) {
     }
   )
 
-  // Register the "short-gist.readFile" command
   let selectedTextDisposable = vscode.commands.registerCommand(
-    "short-gist.publishSelection",
+    "QuickGist.publishSelection",
     async () => {
       const editor = vscode.window.activeTextEditor
       if (editor) {

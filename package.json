@@ -1,10 +1,12 @@
 {
-  "name": "short-gist",
-  "displayName": "short-gist",
-  "description": "It helps you generate short url and gists from the files.",
+  "name": "QuickGist",
+  "displayName": "QuickGist",
+  "description": "It generates the gists for the active file or selected portion and generates a small url for that.",
   "version": "0.0.1",
+  "publisher": "happys1ngh",
+  "repository": "https://github.com/HAPPYS1NGH/QuickGist",
   "engines": {
-    "vscode": "^1.52.0"
+    "vscode": "^1.87.0"
   },
   "categories": [
     "Other"
@@ -14,14 +16,14 @@
   "contributes": {
     "commands": [
       {
-        "command": "short-gist.publishFile",
+        "command": "QuickGist.publishFile",
         "title": "Publish File",
-        "category": "Short Gist"
+        "category": "QuickGist"
       },
       {
-        "command": "short-gist.publishSelection",
+        "command": "QuickGist.publishSelection",
         "title": "Publish Selection",
-        "category": "Short Gist"
+        "category": "QuickGist"
       }
     ]
   },
