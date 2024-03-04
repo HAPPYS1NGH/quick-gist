@@ -9,15 +9,13 @@ async function activate(context) {
   // Create a new instance of the Credentials class for authorization
   const octokit = await authenticateGithub(context)
 
-  // Register the "short-gist.publishFile" command
   let fileDisposable = vscode.commands.registerCommand(
     "short-gist.publishFile",
     async () => {
-      // Get the active text editor
       const editor = vscode.window.activeTextEditor
       if (editor) {
-        const fileUri = editor.document.uri
         try {
+          const fileUri = editor.document.uri
           const fileContent = await vscode.workspace.fs.readFile(fileUri)
           // Get the file name from the file path and use it not available then use Readme.md
           const fileName =
@@ -25,19 +23,10 @@ async function activate(context) {
           // Convert the buffer to a string (assuming it's a text file)
           const contentString = Buffer.from(fileContent).toString("utf-8")
 
-          // Create a new Gist using the content of the file
           const gistURL = await createGist(contentString, fileName, octokit)
-
-          // Shorten the Gist URL using the RapidAPI
           const url = await shortenUrl(gistURL)
 
-          // Display the Shortened URL to the user along with Gist URL
-          vscode.window.showInformationMessage(
-            "Gist created successfully! " +
-              gistURL +
-              " \n Shortened URL: " +
-              url
-          )
+          showGistDetails(gistURL, url)
         } catch (error) {
           console.error("Error reading file:", error.message)
           vscode.window.showErrorMessage(
@@ -52,29 +41,18 @@ async function activate(context) {
   let selectedTextDisposable = vscode.commands.registerCommand(
     "short-gist.publishSelection",
     async () => {
-      // Get the active text editor
       const editor = vscode.window.activeTextEditor
       if (editor) {
         try {
+          // Get the selected text from the active editor
           const contentString = editor.document.getText(editor.selection)
-          // Get the file name from the file path and use it not available then use Readme.md
           const fileName =
             editor.document.fileName.split("/").pop() || "Readme.md"
-          // Convert the buffer to a string (assuming it's a text file)
 
-          // Create a new Gist using the content of the file
           const gistURL = await createGist(contentString, fileName, octokit)
-
-          // Shorten the Gist URL using the RapidAPI
           const url = await shortenUrl(gistURL)
 
-          // Display the Shortened URL to the user along with Gist URL
-          vscode.window.showInformationMessage(
-            "Gist created successfully! " +
-              gistURL +
-              " \n Shortened URL: " +
-              url
-          )
+          showGistDetails(gistURL, url)
         } catch (error) {
           console.error("Error reading file:", error.message)
           vscode.window.showErrorMessage(
@@ -128,6 +106,21 @@ async function shortenUrl(url) {
   return response.data.shortened
 }
 
+async function showGistDetails(gistURL, shortURL) {
+  const action = await vscode.window.showInformationMessage(
+    "Gist created successfully!",
+    "Copy Short URL",
+    "Visit Gist"
+  )
+
+  if (action === "Copy Short URL") {
+    vscode.env.clipboard.writeText(shortURL)
+  } else if (action === "Visit Gist") {
+    vscode.env.openExternal(vscode.Uri.parse(gistURL))
+  }
+  vscode.window.showInformationMessage(`Short URL is ${shortURL}`)
+  vscode.window.showInformationMessage(`Gist URL is ${gistURL}`)
+}
 // Export the activate functions
 module.exports = {
   activate,
