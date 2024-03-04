@@ -25,7 +25,6 @@ class Credentials {
       this.octokit = new Octokit.Octokit({
         auth: session.accessToken,
       })
-      console.log("session", session)
       return
     }
 

@@ -14,12 +14,9 @@
   "contributes": {
     "commands": [
       {
-        "command": "short-gist.helloWorld",
-        "title": "Hello World"
-      },
-      {
-        "command": "short-gist.readFile",
-        "title": "Read File"
+        "command": "short-gist.publishFile",
+        "title": "Publish File",
+        "category": "Short Gist"
       }
     ]
   },
