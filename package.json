@@ -17,6 +17,11 @@
         "command": "short-gist.publishFile",
         "title": "Publish File",
         "category": "Short Gist"
+      },
+      {
+        "command": "short-gist.publishSelection",
+        "title": "Publish Selection",
+        "category": "Short Gist"
       }
     ]
   },

@@ -9,8 +9,8 @@ async function activate(context) {
   // Create a new instance of the Credentials class for authorization
   const octokit = await authenticateGithub(context)
 
-  // Register the "short-gist.readFile" command
-  let readFileDisposable = vscode.commands.registerCommand(
+  // Register the "short-gist.publishFile" command
+  let fileDisposable = vscode.commands.registerCommand(
     "short-gist.publishFile",
     async () => {
       // Get the active text editor
@@ -47,8 +47,46 @@ async function activate(context) {
       }
     }
   )
+
+  // Register the "short-gist.readFile" command
+  let selectedTextDisposable = vscode.commands.registerCommand(
+    "short-gist.publishSelection",
+    async () => {
+      // Get the active text editor
+      const editor = vscode.window.activeTextEditor
+      if (editor) {
+        try {
+          const contentString = editor.document.getText(editor.selection)
+          // Get the file name from the file path and use it not available then use Readme.md
+          const fileName =
+            editor.document.fileName.split("/").pop() || "Readme.md"
+          // Convert the buffer to a string (assuming it's a text file)
+
+          // Create a new Gist using the content of the file
+          const gistURL = await createGist(contentString, fileName, octokit)
+
+          // Shorten the Gist URL using the RapidAPI
+          const url = await shortenUrl(gistURL)
+
+          // Display the Shortened URL to the user along with Gist URL
+          vscode.window.showInformationMessage(
+            "Gist created successfully! " +
+              gistURL +
+              " \n Shortened URL: " +
+              url
+          )
+        } catch (error) {
+          console.error("Error reading file:", error.message)
+          vscode.window.showErrorMessage(
+            "Failed to read or create Gist. See the console for details."
+          )
+        }
+      }
+    }
+  )
+
   // Push the disposables to the context.subscription array
-  context.subscriptions.push(readFileDisposable)
+  context.subscriptions.push(fileDisposable, selectedTextDisposable)
 }
 
 // Authenticate with GitHub using the credentials
