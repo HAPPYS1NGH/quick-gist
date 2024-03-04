@@ -1,17 +1,13 @@
 const vscode = require("vscode")
 const axios = require("axios")
+const Credentials = require("./credentials")
+// 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
 require("dotenv").config({ path: __dirname + "/.env.local" })
 
-function activate(context) {
+async function activate(context) {
   console.log('Congratulations, your extension "short-gist" is now active!')
-
-  // Register the "short-gist.helloWorld" command
-  let helloWorldDisposable = vscode.commands.registerCommand(
-    "short-gist.helloWorld",
-    function () {
-      vscode.window.showInformationMessage("Hello World from short-gist!")
-    }
-  )
+  const credentials = new Credentials()
+  await credentials.initialize(context)
 
   // Register the "short-gist.readFile" command
   let readFileDisposable = vscode.commands.registerCommand(
@@ -31,11 +27,7 @@ function activate(context) {
           // Convert the buffer to a string (assuming it's a text file)
           const contentString = Buffer.from(fileContent).toString("utf-8")
 
-          // Log the file content
-          //   console.log(contentString)
-
-          // Call the createGist function to create a Gist
-          const gistURL = await createGist(contentString)
+          const gistURL = await createGist(contentString, context)
           console.log(gistURL)
           const url = await shortenUrl(gistURL)
           console.log(url)
@@ -55,17 +47,33 @@ function activate(context) {
   )
 
   // Push the disposables to the context.subscriptions array
-  context.subscriptions.push(helloWorldDisposable, readFileDisposable)
+  context.subscriptions.push(readFileDisposable)
 }
 
 // Deactivation hook
 function deactivate() {}
 
 // Register the "short-gist.createGist" command
-const createGist = async (contentString) => {
-  let gistURL = "https://happysingh.vercel.app/"
+const createGist = async (contentString, context) => {
+  const credentials = new Credentials()
+  await credentials.initialize(context)
+  const octokit = await credentials.getOctokit()
+  const userInfo = await octokit.users.getAuthenticated()
+  console.log(userInfo)
+  const gistDescription = "Gist created using the short-gist extension"
+  const gistFileName = "short-gist.txt"
+  const response = await octokit.rest.gists.create({
+    description: gistDescription,
+    public: true,
+    files: {
+      [gistFileName]: {
+        content: contentString,
+      },
+    },
+  })
 
-  return gistURL
+  console.log(response)
+  return response.data.html_url
 }
 
 async function shortenUrl(url) {
