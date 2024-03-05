@@ -9,8 +9,33 @@ async function activate(context) {
   // Create a new instance of the Credentials class for authorization
   const octokit = await authenticateGithub(context)
 
-  let fileDisposable = vscode.commands.registerCommand(
+  let fileGistDisposable = vscode.commands.registerCommand(
     "QuickGist.publishFile",
+    async () => {
+      const editor = vscode.window.activeTextEditor
+      if (editor) {
+        try {
+          const fileUri = editor.document.uri
+          const fileContent = await vscode.workspace.fs.readFile(fileUri)
+          // Get the file name from the file path and use it not available then use Readme.md
+          const fileName =
+            editor.document.fileName.split("/").pop() || "Readme.md"
+          // Convert the buffer to a string (assuming it's a text file)
+          const contentString = Buffer.from(fileContent).toString("utf-8")
+
+          const gistURL = await createGist(contentString, fileName, octokit)
+          showGistDetails(gistURL)
+        } catch (error) {
+          console.error("Error reading file:", error.message)
+          vscode.window.showErrorMessage(
+            "Failed to read or create Gist. See the console for details."
+          )
+        }
+      }
+    }
+  )
+  let fileShortGistDisposable = vscode.commands.registerCommand(
+    "QuickGist.shortenAndPublishFile",
     async () => {
       const editor = vscode.window.activeTextEditor
       if (editor) {
@@ -26,7 +51,7 @@ async function activate(context) {
           const gistURL = await createGist(contentString, fileName, octokit)
           const url = await shortenUrl(gistURL)
 
-          showGistDetails(gistURL, url)
+          showGistShortenDetails(gistURL, url)
         } catch (error) {
           console.error("Error reading file:", error.message)
           vscode.window.showErrorMessage(
@@ -37,8 +62,31 @@ async function activate(context) {
     }
   )
 
-  let selectedTextDisposable = vscode.commands.registerCommand(
+  let selectedGistDisposable = vscode.commands.registerCommand(
     "QuickGist.publishSelection",
+    async () => {
+      const editor = vscode.window.activeTextEditor
+      if (editor) {
+        try {
+          // Get the selected text from the active editor
+          const contentString = editor.document.getText(editor.selection)
+          const fileName =
+            editor.document.fileName.split("/").pop() || "Readme.md"
+
+          const gistURL = await createGist(contentString, fileName, octokit)
+          showGistDetails(gistURL)
+        } catch (error) {
+          console.error("Error reading file:", error.message)
+          vscode.window.showErrorMessage(
+            "Failed to read or create Gist. See the console for details."
+          )
+        }
+      }
+    }
+  )
+
+  let selectedShortenGistDisposable = vscode.commands.registerCommand(
+    "QuickGist.shortenAndPublishSelection",
     async () => {
       const editor = vscode.window.activeTextEditor
       if (editor) {
@@ -51,7 +99,7 @@ async function activate(context) {
           const gistURL = await createGist(contentString, fileName, octokit)
           const url = await shortenUrl(gistURL)
 
-          showGistDetails(gistURL, url)
+          showGistShortenDetails(gistURL, url)
         } catch (error) {
           console.error("Error reading file:", error.message)
           vscode.window.showErrorMessage(
@@ -63,7 +111,12 @@ async function activate(context) {
   )
 
   // Push the disposables to the context.subscription array
-  context.subscriptions.push(fileDisposable, selectedTextDisposable)
+  context.subscriptions.push(
+    fileGistDisposable,
+    selectedGistDisposable,
+    fileShortGistDisposable,
+    selectedShortenGistDisposable
+  )
 }
 
 // Authenticate with GitHub using the credentials
@@ -105,7 +158,22 @@ async function shortenUrl(url) {
   return response.data.shortened
 }
 
-async function showGistDetails(gistURL, shortURL) {
+async function showGistDetails(gistURL) {
+  const action = await vscode.window.showInformationMessage(
+    "Gist created successfully!",
+    "Copy Gist URL",
+    "Visit Gist"
+  )
+
+  if (action === "Copy Gist URL") {
+    vscode.env.clipboard.writeText(gistURL)
+  } else if (action === "Visit Gist") {
+    vscode.env.openExternal(vscode.Uri.parse(gistURL))
+  }
+  vscode.window.showInformationMessage(`Gist URL is ${gistURL}`)
+}
+
+async function showGistShortenDetails(gistURL, shortURL) {
   const action = await vscode.window.showInformationMessage(
     "Gist created successfully!",
     "Copy Short URL",
