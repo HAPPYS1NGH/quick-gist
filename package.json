@@ -1,10 +1,38 @@
 {
-  "name": "QuickGist",
+  "name": "quick-gist",
   "displayName": "QuickGist",
   "description": "It generates the gists for the active file or selected portion and generates a small url for that.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "publisher": "happys1ngh",
-  "repository": "https://github.com/HAPPYS1NGH/QuickGist",
+  "icon": "images/icon.png",
+  "pricing": "Free",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HAPPYS1NGH/quick-gist/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HAPPYS1NGH/quick-gist"
+  },
+  "author": {
+    "name": "Harpreet Singh",
+    "url": "https://github.com/happys1ngh"
+  },
+  "keywords": [
+    "Gist",
+    "quick-gist",
+    "QuickGist",
+    "Quick Gist",
+    "Fast Gist",
+    "Short URL",
+    "GitHub",
+    "Share",
+    "Code Sharing",
+    "Publish",
+    "Code Snippets",
+    "File Sharing",
+    "Collaborate"
+  ],
   "engines": {
     "vscode": "^1.87.0"
   },
@@ -17,15 +45,49 @@
     "commands": [
       {
         "command": "QuickGist.publishFile",
-        "title": "Publish File",
+        "title": "Create Gist File",
         "category": "QuickGist"
       },
       {
         "command": "QuickGist.publishSelection",
-        "title": "Publish Selection",
+        "title": "Create Gist for Selection",
+        "category": "QuickGist"
+      },
+      {
+        "command": "QuickGist.shortenAndPublishFile",
+        "title": "Generate Short Gist URL for File",
+        "category": "QuickGist"
+      },
+      {
+        "command": "QuickGist.shortenAndPublishSelection",
+        "title": "Generate Short Gist URL for Selectio",
         "category": "QuickGist"
       }
-    ]
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorTextFocus",
+          "command": "QuickGist.publishFile",
+          "group": "1_modification"
+        },
+        {
+          "when": "editorTextFocus",
+          "command": "QuickGist.shortenAndPublishFile",
+          "group": "1_modification"
+        },
+        {
+          "when": "editorHasSelection",
+          "command": "QuickGist.publishSelection",
+          "group": "1_modification"
+        },
+        {
+          "when": "editorHasSelection",
+          "command": "QuickGist.shortenAndPublishSelection",
+          "group": "1_modification"
+        }
+      ]
+    }
   },
   "scripts": {
     "lint": "eslint .",
