@@ -4,13 +4,13 @@ const Credentials = require("./credentials")
 require("dotenv").config({ path: __dirname + "/.env.local" })
 
 async function activate(context) {
-  console.log('Congratulations, your extension "QuickGist" is now active!')
+  console.log('Congratulations, your extension "quick-gist" is now active!')
 
   // Create a new instance of the Credentials class for authorization
   const octokit = await authenticateGithub(context)
 
   let fileGistDisposable = vscode.commands.registerCommand(
-    "QuickGist.publishFile",
+    "quick-gist.publishFile",
     async () => {
       const editor = vscode.window.activeTextEditor
       if (editor) {
@@ -28,14 +28,14 @@ async function activate(context) {
         } catch (error) {
           console.error("Error reading file:", error.message)
           vscode.window.showErrorMessage(
-            "Failed to read or create Gist. See the console for details."
+            `Failed to create Gist. \n ${error.message}`
           )
         }
       }
     }
   )
   let fileShortGistDisposable = vscode.commands.registerCommand(
-    "QuickGist.shortenAndPublishFile",
+    "quick-gist.shortenAndPublishFile",
     async () => {
       const editor = vscode.window.activeTextEditor
       if (editor) {
@@ -55,7 +55,7 @@ async function activate(context) {
         } catch (error) {
           console.error("Error reading file:", error.message)
           vscode.window.showErrorMessage(
-            "Failed to read or create Gist. See the console for details."
+            `Failed to create Gist. \n ${error.message}`
           )
         }
       }
@@ -63,7 +63,7 @@ async function activate(context) {
   )
 
   let selectedGistDisposable = vscode.commands.registerCommand(
-    "QuickGist.publishSelection",
+    "quick-gist.publishSelection",
     async () => {
       const editor = vscode.window.activeTextEditor
       if (editor) {
@@ -78,7 +78,7 @@ async function activate(context) {
         } catch (error) {
           console.error("Error reading file:", error.message)
           vscode.window.showErrorMessage(
-            "Failed to read or create Gist. See the console for details."
+            `Failed to create Gist. \n ${error.message}`
           )
         }
       }
@@ -86,7 +86,7 @@ async function activate(context) {
   )
 
   let selectedShortenGistDisposable = vscode.commands.registerCommand(
-    "QuickGist.shortenAndPublishSelection",
+    "quick-gist.shortenAndPublishSelection",
     async () => {
       const editor = vscode.window.activeTextEditor
       if (editor) {
@@ -103,7 +103,7 @@ async function activate(context) {
         } catch (error) {
           console.error("Error reading file:", error.message)
           vscode.window.showErrorMessage(
-            "Failed to read or create Gist. See the console for details."
+            `Failed to create Gist. \n ${error.message}`
           )
         }
       }
