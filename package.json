@@ -2,7 +2,7 @@
   "name": "quick-gist",
   "displayName": "QuickGist",
   "description": "It generates the gists for the active file or selected portion and generates a small url for that.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "happys1ngh",
   "icon": "images/icon.png",
   "pricing": "Free",
@@ -44,22 +44,22 @@
   "contributes": {
     "commands": [
       {
-        "command": "QuickGist.publishFile",
+        "command": "quick-gist.publishFile",
         "title": "Create Gist File",
         "category": "QuickGist"
       },
       {
-        "command": "QuickGist.publishSelection",
+        "command": "quick-gist.publishSelection",
         "title": "Create Gist for Selection",
         "category": "QuickGist"
       },
       {
-        "command": "QuickGist.shortenAndPublishFile",
+        "command": "quick-gist.shortenAndPublishFile",
         "title": "Generate Short Gist URL for File",
         "category": "QuickGist"
       },
       {
-        "command": "QuickGist.shortenAndPublishSelection",
+        "command": "quick-gist.shortenAndPublishSelection",
         "title": "Generate Short Gist URL for Selectio",
         "category": "QuickGist"
       }
@@ -68,22 +68,22 @@
       "editor/context": [
         {
           "when": "editorTextFocus",
-          "command": "QuickGist.publishFile",
+          "command": "quick-gist.publishFile",
           "group": "1_modification"
         },
         {
           "when": "editorTextFocus",
-          "command": "QuickGist.shortenAndPublishFile",
+          "command": "quick-gist.shortenAndPublishFile",
           "group": "1_modification"
         },
         {
           "when": "editorHasSelection",
-          "command": "QuickGist.publishSelection",
+          "command": "quick-gist.publishSelection",
           "group": "1_modification"
         },
         {
           "when": "editorHasSelection",
-          "command": "QuickGist.shortenAndPublishSelection",
+          "command": "quick-gist.shortenAndPublishSelection",
           "group": "1_modification"
         }
       ]

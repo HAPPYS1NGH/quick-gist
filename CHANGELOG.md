@@ -1,9 +1,11 @@
-# Change Log
-
-All notable changes to the "short-gist" extension will be documented in this file.
-
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+# Changelog
 
 ## [Unreleased]
 
-- Initial release
+### Changed
+
+- Fixed a bug where the extension name was inconsistent. Renamed from "QuickGist" to "quick-gist".
+
+## [1.0.1] - YYYY-MM-DD
+
+...
